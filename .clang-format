@@ -1,0 +1,10 @@
+BasedOnStyle: Google
+Standard: Cpp11
+AlignAfterOpenBracket: AlwaysBreak
+BinPackArguments: false
+BinPackParameters: false
+DerivePointerAlignment: false
+PointerAlignment: Left
+ColumnLimit: 120
+CommentPragmas: '\{\{[[:space:]]*[A-Z0-9_]+(BLOCK|SLOT)_(BEGIN|END)'
+IncludeBlocks: Regroup
