@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 
+namespace minirender {
 // 是指把原来对齐方式设置压栈，并设新的对齐方式设置为一个字节对齐
 #pragma pack(push, 1)
 struct TGAHeader {
@@ -60,3 +61,4 @@ struct TGAImage {
   int bpp = 0;
   std::vector<std::uint8_t> data = {};
 };
+}  // namespace minirender
