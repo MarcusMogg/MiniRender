@@ -10,7 +10,8 @@ add_subdirectory("src")
 add_executable (minirender 
     "minirender.cpp" 
     "minirender.h"
-)
+    "ch0.h"
+    "ch1.h")
 
 target_link_libraries( minirender
     PRIVATE

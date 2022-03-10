@@ -7,9 +7,12 @@ project ("minirenderlib")
 
 # 将源代码添加到此项目的可执行文件。
 add_library (minirenderlib
-    "tgaimage.h"
-    "tgaimage.cc"
-)
+ "tgaimage.h"
+ "tgaimage.cc"
+ "geometry.h"
+ "geometry.cc"
+ "line.h"
+ "line.cc")
 
 target_include_directories(minirenderlib
     PUBLIC
