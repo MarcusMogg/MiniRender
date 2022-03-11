@@ -12,7 +12,9 @@ add_library (minirenderlib
  "geometry.h"
  "geometry.cc"
  "line.h"
- "line.cc")
+ "line.cc"
+ "model.h"
+ "model.cc")
 
 target_include_directories(minirenderlib
     PUBLIC
