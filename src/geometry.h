@@ -5,6 +5,8 @@
 
 namespace minirender {
 
+static const double eps = 1e-6;
+
 // struct Point2d {
 //   float x;
 //   float y;
