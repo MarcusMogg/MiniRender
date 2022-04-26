@@ -1,5 +1,6 @@
 #pragma once
 
+#include "model.h"
 #include "triangle.h"
 
 namespace minirender {
