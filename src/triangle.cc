@@ -101,8 +101,8 @@ void minirender::Draw2dTriangleWithZbuffer(
     box_min.y = std::max(std::min(i.y, box_min.y), 0.);
   }
   const vec3 pz = {points[0].z, points[1].z, points[2].z};
-  for (double i = box_min.x; i <= box_max.x; i++) {
-    for (double j = box_min.y; j <= box_max.y; j++) {
+  for (double i = int(box_min.x); i <= box_max.x; i++) {
+    for (double j = int(box_min.y); j <= box_max.y; j++) {
       const auto b = Barycentric(points, {i, j, 0});
       if (b.x < 0 || b.y < 0 || b.z < 0) {
         continue;
@@ -134,8 +134,8 @@ void minirender::Draw2dTriangleWithZbuffer(
     box_min.y = std::max(std::min(i.y, box_min.y), 0.);
   }
   const vec3 pz = {points[0].z, points[1].z, points[2].z};
-  for (double i = box_min.x; i <= box_max.x; i++) {
-    for (double j = box_min.y; j <= box_max.y; j++) {
+  for (double i = int(box_min.x); i <= box_max.x; i++) {
+    for (double j = int(box_min.y); j <= box_max.y; j++) {
       const auto b = Barycentric(points, {i, j, 0});
       if (b.x < 0 || b.y < 0 || b.z < 0) {
         continue;

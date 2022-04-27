@@ -12,7 +12,7 @@ add_executable (minirender
     "minirender.h"
     "ch0.h"
     "ch1.h"
-    "ch2.h" "ch3.h")
+    "ch2.h" "ch3.h" "ch4.h")
 
 target_link_libraries( minirender
     PRIVATE

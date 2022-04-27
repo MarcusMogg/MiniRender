@@ -25,8 +25,8 @@ void First(const std::string& file) {
       const vec3& v0 = model.vert(i, j);
       // 图像中间 对应模型中间
       // NOTICE: pixel coordinate shoulde be integer
-      const int x0 = (v0.x + 1.) * width / 2.;
-      const int y0 = (v0.y + 1.) * height / 2.;
+      const double x0 = (v0.x + 1.) * width / 2.;
+      const double y0 = (v0.y + 1.) * height / 2.;
       screen.emplace_back(x0, y0, v0.z);
       word.push_back(v0);
     }
@@ -57,8 +57,8 @@ void Second(const std::string& file) {
     for (int j = 0; j < 3; j++) {
       const vec3& v0 = model.vert(i, j);
       // 图像中间 对应模型中间
-      const int x0 = (v0.x + 1.) * width / 2.;
-      const int y0 = (v0.y + 1.) * height / 2.;
+      const double x0 = (v0.x + 1.) * width / 2.;
+      const double y0 = (v0.y + 1.) * height / 2.;
       screen.emplace_back(x0, y0, v0.z);
       word.push_back(v0);
       uv.push_back(model.uv(i, j));
