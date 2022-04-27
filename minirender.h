@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <cstdlib>
 #include <iostream>
 
 #include "ch0.h"

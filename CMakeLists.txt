@@ -19,4 +19,7 @@ target_link_libraries( minirender
         minirenderlib
 )
 
+FILE(GLOB MYRES "resource/*")
+FILE(COPY ${MYRES} DESTINATION "${PROJECT_BINARY_DIR}/resource")
+
 # TODO: 如有需要，请添加测试并安装目标。
