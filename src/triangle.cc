@@ -118,7 +118,12 @@ void minirender::Draw2dTriangleWithZbuffer(
 }
 
 void minirender::Draw2dTriangleWithZbuffer(
-    const std::vector<vec3>& points, std::vector<TGAColor>& texture, TGAImage& image, std::vector<double>& zbuffer) {
+    const std::vector<vec3>& points,
+    const std::vector<vec2>& uv,
+    const TGAImage& tex,
+    const double theta,
+    TGAImage& image,
+    std::vector<double>& zbuffer) {
   vec2 box_min = {points[0].x, points[0].y};
   vec2 box_max = {points[0].x, points[0].y};
 
@@ -139,14 +144,18 @@ void minirender::Draw2dTriangleWithZbuffer(
 
       if (zbuffer[int(i + j * image.width())] < z) {
         zbuffer[int(i + j * image.width())] = z;
-        TGAColor color;
+        vec2 pos;
         for (size_t t = 0; t < 3; t++) {
-          color[0] += texture[t][0] * b[t];
-          color[1] += texture[t][1] * b[t];
-          color[2] += texture[t][2] * b[t];
+          const vec2& v0 = uv[t];
+
+          const int x0 = v0.x * tex.width();
+          const int y0 = v0.y * tex.height();
+          pos.x += x0 * b[t];
+          pos.y += y0 * b[t];
         }
 
-        image.set(i, j, color);
+        auto c = tex.get(int(pos.x), int(pos.y));
+        image.set(i, j, TGAColor(c[2] * theta, c[1] * theta, c[0] * theta));
       }
     }
   }
