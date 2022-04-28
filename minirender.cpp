@@ -16,5 +16,6 @@ int main(int argc, char** argv) {
   ch3::First("./resource/african_head/african_head.obj");
   ch3::Second("./resource/african_head/african_head.obj");
   ch4::First("./resource/african_head/african_head.obj");
+  ch5::First("./resource/african_head/african_head.obj");
   return 0;
 }

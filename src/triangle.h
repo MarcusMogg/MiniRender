@@ -17,4 +17,12 @@ void Draw2dTriangleWithZbuffer(
     const double theta,
     TGAImage& image,
     std::vector<double>& zbuffer);
+
+void Draw2dTriangleWithZbuffer(
+    const std::vector<vec3>& points,
+    const std::vector<vec2>& uv,
+    const TGAImage& tex,
+    const vec3& theta,
+    TGAImage& image,
+    std::vector<double>& zbuffer);
 }  // namespace minirender

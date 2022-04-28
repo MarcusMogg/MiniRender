@@ -160,3 +160,49 @@ void minirender::Draw2dTriangleWithZbuffer(
     }
   }
 }
+
+void minirender::Draw2dTriangleWithZbuffer(
+    const std::vector<vec3>& points,
+    const std::vector<vec2>& uv,
+    const TGAImage& tex,
+    const vec3& theta,
+    TGAImage& image,
+    std::vector<double>& zbuffer) {
+  vec2 box_min = {points[0].x, points[0].y};
+  vec2 box_max = {points[0].x, points[0].y};
+
+  for (const auto& i : points) {
+    box_max.x = std::min(std::max(i.x, box_max.x), image.width() - 1.);
+    box_max.y = std::min(std::max(i.y, box_max.y), image.height() - 1.);
+    box_min.x = std::max(std::min(i.x, box_min.x), 0.);
+    box_min.y = std::max(std::min(i.y, box_min.y), 0.);
+  }
+  const vec3 pz = {points[0].z, points[1].z, points[2].z};
+  for (double i = int(box_min.x); i <= box_max.x; i++) {
+    for (double j = int(box_min.y); j <= box_max.y; j++) {
+      const auto b = Barycentric(points, {i, j, 0});
+      if (b.x < 0 || b.y < 0 || b.z < 0) {
+        continue;
+      }
+      double z = pz * b;
+
+      if (zbuffer[int(i + j * image.width())] < z) {
+        zbuffer[int(i + j * image.width())] = z;
+        vec2 pos;
+        double the = theta * b;
+        if (the < 0) continue;
+        for (size_t t = 0; t < 3; t++) {
+          const vec2& v0 = uv[t];
+
+          const int x0 = v0.x * tex.width();
+          const int y0 = v0.y * tex.height();
+          pos.x += x0 * b[t];
+          pos.y += y0 * b[t];
+        }
+
+        auto c = tex.get(int(pos.x), int(pos.y));
+        image.set(i, j, TGAColor(c[2] * the, c[1] * the, c[0] * the));
+      }
+    }
+  }
+}
