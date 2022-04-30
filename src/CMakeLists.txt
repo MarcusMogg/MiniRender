@@ -14,7 +14,10 @@ add_library (minirenderlib
  "line.h"
  "line.cc"
  "model.h"
- "model.cc")
+ "model.cc" 
+ "triangle.h"
+ "triangle.cc"
+)
 
 target_include_directories(minirenderlib
     PUBLIC
