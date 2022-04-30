@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer } = require('electron');
-const { hello } = require("../src/clib/hello")
+const { hello } = require("bindings")("minirender-addon")
 
 // White-listed channels.
 const ipc = {
