@@ -3,9 +3,14 @@
 
 #pragma once
 
+#include <cstdlib>
 #include <iostream>
 
 #include "ch0.h"
 #include "ch1.h"
+#include "ch2.h"
+#include "ch3.h"
+#include "ch4.h"
+#include "ch5.h"
 
 // TODO: 在此处引用程序需要的其他标头。
