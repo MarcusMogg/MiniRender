@@ -148,7 +148,7 @@ struct vec<3> {
     *this = (*this) / norm();
     return *this;
   }
-
+  vec normalize() const { return (*this) / norm(); }
   double x{}, y{}, z{};
 };
 

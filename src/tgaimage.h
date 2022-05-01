@@ -5,6 +5,8 @@
 #include <fstream>
 #include <vector>
 
+#include "geometry.h"
+
 namespace minirender {
 // 是指把原来对齐方式设置压栈，并设新的对齐方式设置为一个字节对齐
 #pragma pack(push, 1)
@@ -36,6 +38,7 @@ struct TGAColor {
     for (int i = bpp; i--; bgra[i] = p[i])
       ;
   }
+
   std::uint8_t& operator[](const int i) { return bgra[i]; }
 };
 
@@ -52,6 +55,10 @@ struct TGAImage {
   void set(const int x, const int y, const TGAColor& c);
   int width() const;
   int height() const;
+
+  // not safe
+  void WriteToBuffer(std::uint8_t* buffer) const;
+  void Clear() { std::fill(data.begin(), data.end(), 0); }
 
  private:
   bool load_rle_data(std::ifstream& in);

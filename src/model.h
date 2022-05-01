@@ -21,15 +21,19 @@ class Model {
   void load_texture(const std::string filename, const std::string suffix, TGAImage& img);
 
  public:
-  Model(const std::string& filename);
+  Model() = default;
+  Model(const std::string& filename) { LoadModel(filename); };
   int nverts() const;
   int nfaces() const;
   vec3 normal(const int iface, const int nthvert) const;  // per triangle corner normal vertex
   vec3 normal(const vec2& uv) const;                      // fetch the normal vector from the normal map texture
   vec3 vert(const int i) const;
   vec3 vert(const int iface, const int nthvert) const;
+  int vertidx(const int iface, const int nthvert) const { return facet_vrt[iface * 3 + nthvert]; }
   vec2 uv(const int iface, const int nthvert) const;
   const TGAImage& diffuse() const { return diffusemap; }
   const TGAImage& specular() const { return specularmap; }
+
+  bool LoadModel(const std::string& filename);
 };
 }  // namespace minirender

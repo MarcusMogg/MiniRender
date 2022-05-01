@@ -5,10 +5,18 @@
 
 using namespace minirender;
 
-Model::Model(const std::string& filename) {
+bool Model::LoadModel(const std::string& filename) {
   std::ifstream in;
   in.open(filename, std::ifstream::in);
-  if (in.fail()) return;
+  if (in.fail()) return false;
+
+  verts.clear();
+  norms.clear();
+  tex_coord.clear();
+  facet_vrt.clear();
+  facet_tex.clear();
+  facet_nrm.clear();
+
   std::string line;
   while (!in.eof()) {
     std::getline(in, line);
@@ -42,7 +50,7 @@ Model::Model(const std::string& filename) {
       if (3 != cnt) {
         std::cerr << "Error: the obj file is supposed to be triangulated" << std::endl;
         in.close();
-        return;
+        return false;
       }
     }
   }
@@ -52,6 +60,7 @@ Model::Model(const std::string& filename) {
   load_texture(filename, "_diffuse.tga", diffusemap);
   load_texture(filename, "_nm_tangent.tga", normalmap);
   load_texture(filename, "_spec.tga", specularmap);
+  return true;
 }
 
 int Model::nverts() const { return verts.size(); }

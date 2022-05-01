@@ -34,7 +34,7 @@ void minirender::Draw2dTriangleUseLineSweep(const std::vector<vec2>& points, con
   FillBetweenline(points_copy[2], points_copy[1], points_copy[0], color, image);
 }
 
-vec3 Barycentric(const std::vector<vec2>& tr, const vec2& p) {
+static vec3 Barycentric(const std::vector<vec2>& tr, const vec2& p) {
   vec3 res = cross(
       vec3(tr[1].x - tr[0].x, tr[2].x - tr[0].x, tr[0].x - p.x),
       vec3(tr[1].y - tr[0].y, tr[2].y - tr[0].y, tr[0].y - p.y));
@@ -53,7 +53,7 @@ vec3 Barycentric(const std::vector<vec2>& tr, const vec2& p) {
 
 // not right
 // p must in the plane of abc
-vec3 Barycentric(const std::vector<vec3>& tr, const vec3& p) {
+static vec3 Barycentric(const std::vector<vec3>& tr, const vec3& p) {
   vec3 res = cross(
       vec3(tr[1].x - tr[0].x, tr[2].x - tr[0].x, tr[0].x - p.x),
       vec3(tr[1].y - tr[0].y, tr[2].y - tr[0].y, tr[0].y - p.y));

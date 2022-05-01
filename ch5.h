@@ -1,6 +1,8 @@
 #pragma once
 
 #include "model.h"
+#include "render.h"
+#include "scene.h"
 #include "transformations.h"
 #include "triangle.h"
 
@@ -93,6 +95,17 @@ void Second(const std::string& file) {
   }
 
   image.write_tga_file("ch5_2.tga");
+}
+
+void Third(const std::string& file) {
+  Renderer r;
+  std::shared_ptr<Scene> s = std::make_shared<Scene>();
+  r.SetScene(s);
+  s->AddModel(file);
+
+  r.RenderToFile("ch5_3.tga");
+  r.RenderToFile("ch5_31.tga");
+  r.RenderToFile("ch5_32.tga");
 }
 
 }  // namespace ch5

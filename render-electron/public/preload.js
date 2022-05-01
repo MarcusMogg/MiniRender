@@ -1,5 +1,5 @@
-const { contextBridge, ipcRenderer } = require('electron');
-const { hello } = require("bindings")("minirender-addon")
+const { contextBridge, ipcRenderer, ipcMain } = require('electron');
+const { hello, render, loadFile, vert } = require("bindings")("minirender-addon")
 
 // White-listed channels.
 const ipc = {
@@ -37,5 +37,8 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
       return ipcRenderer.invoke(channel, args);
     }
   },
-  hello: hello
+  hello: hello,
+  loadFile: loadFile,
+  render: render,
+  vert,
 });
