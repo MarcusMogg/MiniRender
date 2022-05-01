@@ -56,8 +56,6 @@ struct TGAImage {
   int width() const;
   int height() const;
 
-  // not safe
-  void WriteToBuffer(std::uint8_t* buffer) const;
   void Clear() { std::fill(data.begin(), data.end(), 0); }
 
  private:

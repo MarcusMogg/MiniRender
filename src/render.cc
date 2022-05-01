@@ -85,7 +85,7 @@ void Renderer::DrawTriangle(
         }
 
         auto c = tex.get(int(pos.x), int(pos.y));
-        image_.set(i, j, TGAColor(c[2] * the, c[1] * the, c[0] * the));
+        SetColor(i, j, TGAColor(c[2] * the, c[1] * the, c[0] * the));
       }
     }
   }
@@ -108,25 +108,45 @@ void Renderer::Rasterization() {
 }
 
 void Renderer::RenderToBuffer(std::uint8_t* buffer) {
-  Clear();
-  VertexProcess();
-  TriangleProcess();
-  Rasterization();
-
-  image_.WriteToBuffer(buffer);
+  type_ = OutType::MEMORY;
+  bit_img_ = buffer;
+  for (int i = 0; i < width; i++) {
+    for (int j = 0; j < height; j++) {
+      bit_img_[(i + j * width) * 4 + 3] = 0xff;
+    }
+  }
+  Render();
 }
 
 void Renderer::RenderToFile(const std::string& filename) {
+  image_.Clear();
+  type_ = OutType::FILE;
+  Render();
+  image_.write_tga_file(filename);
+}
+
+void Renderer::Render() {
   Clear();
 
   VertexProcess();
   TriangleProcess();
   Rasterization();
-
-  image_.write_tga_file(filename);
 }
+
 void Renderer::Clear() {
-  image_.Clear();
   processed_verts_.clear();
   std::fill(zbuffer_.begin(), zbuffer_.end(), -std::numeric_limits<double>::max());
+}
+
+void Renderer::SetColor(int x, int y, TGAColor c) {
+  if (type_ == OutType::FILE) {
+    image_.set(x, y, c);
+  } else {
+    y = height - y - 1;
+    int idx = (x + y * width) * 4;
+    bit_img_[idx] = c[2];
+    bit_img_[idx + 1] = c[1];
+    bit_img_[idx + 2] = c[0];
+    bit_img_[idx + 3] = c[3];
+  }
 }

@@ -9,6 +9,8 @@
 namespace minirender {
 class Scene;
 
+enum class OutType : uint32_t { FILE, MEMORY };
+
 class Renderer {
  public:
   static const int width = 800;
@@ -34,6 +36,11 @@ class Renderer {
   std::vector<vec3> processed_verts_;
   std::vector<double> zbuffer_;
   TGAImage image_;
+  std::uint8_t* bit_img_;
+  OutType type_;
+
+  void SetColor(int x, int y, TGAColor c);
+  void Render();
 };
 
 }  // namespace minirender

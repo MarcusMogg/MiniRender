@@ -226,18 +226,3 @@ void TGAImage::flip_vertically() {
 int TGAImage::width() const { return w; }
 
 int TGAImage::height() const { return h; }
-
-void TGAImage::WriteToBuffer(std::uint8_t* buffer) const {
-  for (int i = 0; i < w; i++)
-    for (int j = 0; j < h; j++) {
-      int base = (i + j * w) * 4;
-      for (int k = 0; k < bpp; k++) {
-        buffer[base + k] = data[(i + j * w) * bpp + bpp - k - 1];
-      }
-      buffer[base + 3] = 0xff;
-    }
-  int half = h >> 1;
-  for (int i = 0; i < w; i++)
-    for (int j = 0; j < half; j++)
-      for (int b = 0; b < 4; b++) std::swap(buffer[(i + j * w) * 4 + b], buffer[(i + (h - 1 - j) * w) * 4 + b]);
-}

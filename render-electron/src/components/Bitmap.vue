@@ -1,6 +1,7 @@
 <template>
   <div>
     <input type="file" v-on:change="handleFile" />
+    <p>帧率 {{ fps }}</p>
     <canvas id="ccc" width="800" height="800" />
   </div>
 </template>
@@ -14,44 +15,40 @@ export default {
   data() {
     return {
       ctx: null,
+      avgRenderMs: 0,
+      alpha: 1 / 100,
+      minRenderTime: 1000 / 60,
+      loaded: false,
     };
   },
 
   methods: {
-    drawImage() {
-      console.log(ipcRenderer.vert());
-      const buf = ipcRenderer.render();
-      console.log(buf);
-      console.log(ipcRenderer.vert());
-      // const img = new ImageData(new Uint8ClampedArray(buf), 800, 800);
+    sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    },
 
-      let img = this.ctx.createImageData(800, 800);
-      // const data = new Uint32Array(img.data.buffer);
-      // const copy = new Uint8Array(800 * 800);
-      // for (let index = 0; index < data.length; index++) {
-      //   copy[index] = data[index];
-      // }
-      // console.log(img.data.buffer);
-      img.data.set(buf);
-      console.log(img);
+    async drawImage() {
+      const start = performance.now();
+      if (this.loaded) {
+        const buf = ipcRenderer.render();
+        let img = this.ctx.createImageData(800, 800);
+        img.data.set(buf);
+        this.ctx.putImageData(img, 0, 0);
+      } else {
+        await this.sleep(this.minRenderTime);
+      }
 
-      // for (let index = 0; index < data.length; index++) {
-      //   if (copy[index] !== data[index]) {
-      //     console.log(index);
-      //     break;
-      //   }
-      // }
-      this.ctx.scale(-1, 1);
-      this.ctx.translate(0, 800);
-      this.ctx.rotate(0, Math.PI);
-      this.ctx.putImageData(img, 0, 0);
+      const end = performance.now();
+      if (this.avgRenderMs === 0) {
+        this.avgRenderMs = end - start;
+      } else {
+        this.avgRenderMs =
+          this.avgRenderMs * (1 - this.alpha) + (end - start) * this.alpha;
+      }
     },
 
     handleFile(e) {
-      console.log(ipcRenderer.vert());
-      console.log(ipcRenderer.loadFile(e.target.files[0].path));
-      console.log(ipcRenderer.vert());
-      this.drawImage();
+      this.loaded = ipcRenderer.loadFile(e.target.files[0].path);
       ipcRenderer.send("FileUrl", e.target.files[0].path);
     },
   },
@@ -60,9 +57,20 @@ export default {
     const c = document.getElementById("ccc");
     this.ctx = c.getContext("2d");
 
+    setInterval(this.drawImage, 1);
+
     ipcRenderer.receive("Draw", (_, buf) => {
       this.drawImage(buf);
     });
+  },
+
+  computed: {
+    fps() {
+      if (this.avgRenderMs === 0) {
+        return `  0`;
+      }
+      return `${Math.round(1000 / this.avgRenderMs)}`;
+    },
   },
 };
 </script>
