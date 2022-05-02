@@ -22,7 +22,10 @@ add_library (minirenderlib
  "scene.h" 
  "camera.h" 
  "render.h"
- "render.cc" )
+ "render.cc" 
+ "shader.h"
+ "shader.cc"
+)
 
 target_include_directories(minirenderlib
     PUBLIC

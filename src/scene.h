@@ -8,9 +8,10 @@ namespace minirender {
 class Renderer;
 
 class Scene {
-  friend class Renderer;
-
  public:
+  friend class Renderer;
+  friend class IShader;
+
   Scene() : light_(1, -1, 1) {}
   ~Scene() = default;
 
