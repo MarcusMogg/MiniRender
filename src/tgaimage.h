@@ -40,6 +40,13 @@ struct TGAColor {
   }
 
   std::uint8_t& operator[](const int i) { return bgra[i]; }
+
+  TGAColor& operator*(double the) {
+    for (size_t i = 0; i < 3; i++) {
+      bgra[i] *= the;
+    }
+    return *this;
+  }
 };
 
 struct TGAImage {
