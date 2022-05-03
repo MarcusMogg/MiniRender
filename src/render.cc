@@ -103,6 +103,6 @@ void Renderer::SetColor(int x, int y, TGAColor c) {
     bit_img_[idx] = c[2];
     bit_img_[idx + 1] = c[1];
     bit_img_[idx + 2] = c[0];
-    bit_img_[idx + 3] = c[3];
+    bit_img_[idx + 3] = 0xff;
   }
 }

@@ -33,28 +33,37 @@ void GouraudShader::Init(Renderer* r) {
 }
 vec4 GouraudShader::Vector(const int iface, const int nthvert) {
   varying_uv_.set_col(nthvert, model().uv(iface, nthvert));
-  // varying_intensity_[nthvert] = std::max(0., model().normal(iface, nthvert).normalize() * light().normalize());
 
+  varying_nrm_.set_col(nthvert, model().normal(iface, nthvert));
   vec4 res = transformation_ * embed<4, 3>(model().vert(iface, nthvert));
-  return res / res[3];
+  res = res / res[3];
+  varying_vert_[nthvert] = proj<3>(res);
+  return res;
 }
 
 bool GouraudShader::Fragement(const vec3 bar, TGAColor& c) {
   vec2 tex = varying_uv_ * bar;
-  vec3 n = proj<3>(uniform_mit_ * embed<4>(model().normal(tex))).normalize();
+  vec3 bn = (varying_nrm_ * bar).normalize();  // per-vertex normal interpolation
+  mat<3, 3> AI = mat<3, 3>{{varying_vert_[1] - varying_vert_[0], varying_vert_[2] - varying_vert_[0], bn}}.invert();
+  vec3 i = AI * vec3(varying_uv_[0][1] - varying_uv_[0][0], varying_uv_[0][2] - varying_uv_[0][0], 0);
+  vec3 j = AI * vec3(varying_uv_[1][1] - varying_uv_[1][0], varying_uv_[1][2] - varying_uv_[1][0], 0);
+
+  mat<3, 3> B = mat<3, 3>{{i.normalize(), j.normalize(), bn}}.transpose();
+
+  vec3 n = (B * (model().normal(tex))).normalize();  // transfer normal from texture to world space after uniform
   vec3 l = proj<3>(uniform_m_ * embed<4>(light())).normalize();
   // after uniform, camera is aways (0,0,z)
   vec3 h = (l + vec3(0, 0, 1)).normalize();
   double diffuse = std::max(0., n * l);
-  static const double ambient = 0.005;
+  static const double ambient = 10;
   const int spec_w = model().specular().width();
   const int spec_h = model().specular().height();
-  double spec = std::pow(std::max(0., n * h), model().specular().get(tex[0] * spec_w, tex[1] * spec_h)[0]);
+  double spec = std::pow(std::max(0., n * h), 5 + model().specular().get(tex[0] * spec_w, tex[1] * spec_h)[0]);
 
   tex = scala_uv_ * tex;
   c = model().diffuse().get(tex.x, tex.y);
   for (int i = 0; i < 3; i++) {
-    c[i] = std::min<float>(c[i] * (ambient + diffuse + 0.6 * spec), 255);
+    c[i] = std::min<float>(ambient + c[i] * (diffuse + 0.6 * spec), 255);
   }
 
   return false;

@@ -54,9 +54,11 @@ class GouraudShader : public IShader {
   mat<4, 4> transformation_;
   mat<4, 4> uniform_m_;
   mat<4, 4> uniform_mit_;
-  vec3 varying_intensity_;  // written by vertex shader, read by fragment shader
+
   mat<2, 3> varying_uv_;
   mat<2, 2> scala_uv_;
+  mat<3, 3> varying_vert_;
+  mat<3, 3> varying_nrm_;
 };
 
 }  // namespace minirender
